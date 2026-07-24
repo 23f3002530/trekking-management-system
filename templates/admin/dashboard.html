@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard | TrekConnect{% endblock %}
+
+{% block content %}
+
+<section class="dashboard-section py-5">
+    <div class="container">
+
+        <div class="mb-4">
+            <p class="dashboard-label mb-2">
+                ADMIN PANEL
+            </p>
+
+            <h1 class="fw-bold mb-2">
+                Welcome, {{ current_user.name }}
+            </h1>
+
+            <p class="text-muted mb-0">
+                Manage staff, trekkers, treks and bookings from one place.
+            </p>
+        </div>
+
+        <div class="row g-4 mb-5">
+
+            <div class="col-lg-3 col-md-6">
+                <div class="dashboard-card h-100">
+                    <p class="text-muted mb-2">
+                        Registered Trekkers
+                    </p>
+
+                    <h2 class="fw-bold mb-0">
+                        {{ total_users }}
+                    </h2>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6">
+                <div class="dashboard-card h-100">
+                    <p class="text-muted mb-2">
+                        Trek Staff
+                    </p>
+
+                    <h2 class="fw-bold mb-0">
+                        {{ total_staff }}
+                    </h2>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6">
+                <div class="dashboard-card h-100">
+                    <p class="text-muted mb-2">
+                        Pending Staff Approvals
+                    </p>
+
+                    <h2 class="fw-bold mb-0">
+                        {{ pending_staff }}
+                    </h2>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6">
+                <div class="dashboard-card h-100">
+                    <p class="text-muted mb-2">
+                        Blocked Accounts
+                    </p>
+
+                    <h2 class="fw-bold mb-0">
+                        {{ blacklisted_users }}
+                    </h2>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row g-4">
+
+            <div class="col-lg-4 col-md-6">
+                <div class="dashboard-action-card h-100">
+                    <h4 class="fw-bold">
+                        Staff Management
+                    </h4>
+
+                    <p class="text-muted">
+                        Review staff registrations and approve eligible staff.
+                    </p>
+
+                    <span class="badge text-bg-secondary">
+                        Coming next
+                    </span>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6">
+                <div class="dashboard-action-card h-100">
+                    <h4 class="fw-bold">
+                        User Management
+                    </h4>
+
+                    <p class="text-muted">
+                        View registered trekkers and manage blocked accounts.
+                    </p>
+
+                    <span class="badge text-bg-secondary">
+                        Coming soon
+                    </span>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6">
+                <div class="dashboard-action-card h-100">
+                    <h4 class="fw-bold">
+                        Trek Management
+                    </h4>
+
+                    <p class="text-muted">
+                        Create treks, assign staff and control trek status.
+                    </p>
+
+                    <span class="badge text-bg-secondary">
+                        Coming soon
+                    </span>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</section>
+
+{% endblock %}
