@@ -1,0 +1,446 @@
+{% extends "base.html" %}
+
+{% block title %}Reports | TrekConnect{% endblock %}
+
+{% block content %}
+
+<div class="container py-5">
+
+    <!-- Page Heading -->
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
+
+        <div>
+            <h2 class="fw-bold mb-1">
+                Reports
+            </h2>
+
+            <p class="text-muted mb-0">
+                View trek, booking and attendance statistics.
+            </p>
+        </div>
+
+        <a
+            href="{{ url_for('admin_dashboard') }}"
+            class="btn btn-outline-secondary"
+        >
+            Back to Dashboard
+        </a>
+
+    </div>
+
+
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+
+        {% if messages %}
+
+            {% for category, message in messages %}
+
+                <div
+                    class="alert alert-{{ category }}"
+                    role="alert"
+                >
+                    {{ message }}
+                </div>
+
+            {% endfor %}
+
+        {% endif %}
+
+    {% endwith %}
+
+
+    <!-- Trek Statistics -->
+    <div class="mb-4">
+
+        <h4 class="fw-bold mb-3">
+            Trek Statistics
+        </h4>
+
+        <div class="row g-4">
+
+            <!-- Total Treks -->
+            <div class="col-md-6 col-lg-3">
+
+                <div class="card shadow-sm border-0 h-100">
+
+                    <div class="card-body text-center">
+
+                        <h6 class="text-muted">
+                            Total Treks
+                        </h6>
+
+                        <h2 class="fw-bold text-primary mb-0">
+                            {{ total_treks }}
+                        </h2>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Open Treks -->
+            <div class="col-md-6 col-lg-3">
+
+                <div class="card shadow-sm border-0 h-100">
+
+                    <div class="card-body text-center">
+
+                        <h6 class="text-muted">
+                            Open Treks
+                        </h6>
+
+                        <h2 class="fw-bold text-success mb-0">
+                            {{ open_treks }}
+                        </h2>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Closed Treks -->
+            <div class="col-md-6 col-lg-3">
+
+                <div class="card shadow-sm border-0 h-100">
+
+                    <div class="card-body text-center">
+
+                        <h6 class="text-muted">
+                            Closed Treks
+                        </h6>
+
+                        <h2 class="fw-bold text-secondary mb-0">
+                            {{ closed_treks }}
+                        </h2>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Completed Treks -->
+            <div class="col-md-6 col-lg-3">
+
+                <div class="card shadow-sm border-0 h-100">
+
+                    <div class="card-body text-center">
+
+                        <h6 class="text-muted">
+                            Completed Treks
+                        </h6>
+
+                        <h2 class="fw-bold text-info mb-0">
+                            {{ completed_treks }}
+                        </h2>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Booking Statistics -->
+    <div class="mb-4">
+
+        <h4 class="fw-bold mb-3">
+            Booking Statistics
+        </h4>
+
+        <div class="row g-4">
+
+            <!-- Confirmed Bookings -->
+            <div class="col-md-6">
+
+                <div class="card shadow-sm border-0 h-100">
+
+                    <div class="card-body text-center">
+
+                        <h6 class="text-muted">
+                            Confirmed Bookings
+                        </h6>
+
+                        <h2 class="fw-bold text-success mb-0">
+                            {{ total_confirmed_bookings }}
+                        </h2>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Cancelled Bookings -->
+            <div class="col-md-6">
+
+                <div class="card shadow-sm border-0 h-100">
+
+                    <div class="card-body text-center">
+
+                        <h6 class="text-muted">
+                            Cancelled Bookings
+                        </h6>
+
+                        <h2 class="fw-bold text-danger mb-0">
+                            {{ total_cancelled_bookings }}
+                        </h2>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Attendance Statistics -->
+    <div class="mb-5">
+
+        <h4 class="fw-bold mb-3">
+            Attendance Statistics
+        </h4>
+
+        <div class="row g-4">
+
+            <!-- Present -->
+            <div class="col-md-4">
+
+                <div class="card shadow-sm border-0 h-100">
+
+                    <div class="card-body text-center">
+
+                        <h6 class="text-muted">
+                            Present
+                        </h6>
+
+                        <h2 class="fw-bold text-success mb-0">
+                            {{ total_present }}
+                        </h2>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Absent -->
+            <div class="col-md-4">
+
+                <div class="card shadow-sm border-0 h-100">
+
+                    <div class="card-body text-center">
+
+                        <h6 class="text-muted">
+                            Absent
+                        </h6>
+
+                        <h2 class="fw-bold text-danger mb-0">
+                            {{ total_absent }}
+                        </h2>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Pending -->
+            <div class="col-md-4">
+
+                <div class="card shadow-sm border-0 h-100">
+
+                    <div class="card-body text-center">
+
+                        <h6 class="text-muted">
+                            Attendance Pending
+                        </h6>
+
+                        <h2 class="fw-bold text-warning mb-0">
+                            {{ total_pending_attendance }}
+                        </h2>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Trek-wise Report -->
+    <div class="card shadow-sm">
+
+        <div class="card-header bg-dark text-white">
+
+            <h5 class="mb-0">
+                Trek-wise Report
+            </h5>
+
+        </div>
+
+
+        {% if trek_reports %}
+
+            <div class="card-body p-0">
+
+                <div class="table-responsive">
+
+                    <table class="table table-bordered table-hover align-middle mb-0">
+
+                        <thead class="table-dark">
+
+                            <tr>
+                                <th>Trek</th>
+                                <th>Location</th>
+                                <th>Start Date</th>
+                                <th>Status</th>
+                                <th>Confirmed</th>
+                                <th>Present</th>
+                                <th>Absent</th>
+                                <th>Pending</th>
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                            {% for report in trek_reports %}
+
+                                <tr>
+
+                                    <!-- Trek Name -->
+                                    <td>
+                                        <strong>
+                                            {{ report.trek.name }}
+                                        </strong>
+                                    </td>
+
+
+                                    <!-- Location -->
+                                    <td>
+                                        {{ report.trek.location }}
+                                    </td>
+
+
+                                    <!-- Start Date -->
+                                    <td>
+                                        {{ report.trek.start_date.strftime("%d %b %Y") }}
+                                    </td>
+
+
+                                    <!-- Trek Status -->
+                                    <td>
+
+                                        {% if report.trek.status == "Open" %}
+
+                                            <span class="badge bg-success">
+                                                Open
+                                            </span>
+
+                                        {% elif report.trek.status == "Completed" %}
+
+                                            <span class="badge bg-primary">
+                                                Completed
+                                            </span>
+
+                                        {% else %}
+
+                                            <span class="badge bg-secondary">
+                                                Closed
+                                            </span>
+
+                                        {% endif %}
+
+                                    </td>
+
+
+                                    <!-- Confirmed Participants -->
+                                    <td>
+                                        {{ report.confirmed_count }}
+                                    </td>
+
+
+                                    <!-- Present -->
+                                    <td>
+
+                                        <span class="badge bg-success">
+                                            {{ report.present_count }}
+                                        </span>
+
+                                    </td>
+
+
+                                    <!-- Absent -->
+                                    <td>
+
+                                        <span class="badge bg-danger">
+                                            {{ report.absent_count }}
+                                        </span>
+
+                                    </td>
+
+
+                                    <!-- Pending -->
+                                    <td>
+
+                                        <span class="badge bg-warning text-dark">
+                                            {{ report.pending_count }}
+                                        </span>
+
+                                    </td>
+
+                                </tr>
+
+                            {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+
+        {% else %}
+
+            <div class="card-body text-center py-5">
+
+                <h4 class="fw-bold mb-3">
+                    No Report Data
+                </h4>
+
+                <p class="text-muted mb-0">
+                    Trek reports will appear here once treks are created.
+                </p>
+
+            </div>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+{% endblock %}

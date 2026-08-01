@@ -1,79 +1,190 @@
 {% extends "base.html" %}
 
-{% block title %}Trekker Dashboard | TrekConnect{% endblock %}
+{% block title %}User Dashboard | TrekConnect{% endblock %}
 
 {% block content %}
 
-<section class="dashboard-section py-5">
-    <div class="container">
+<div class="container py-5">
 
-        <div class="mb-5">
-            <p class="dashboard-label mb-2">
-                TREKKER DASHBOARD
-            </p>
+    <!-- Welcome section -->
+    <div class="mb-4">
 
-            <h1 class="fw-bold mb-2">
-                Welcome, {{ current_user.name }}
-            </h1>
+        <p class="text-success fw-bold text-uppercase mb-2">
+            Trekker Dashboard
+        </p>
 
-            <p class="text-muted mb-0">
-                Explore available treks and manage your trekking bookings.
-            </p>
+        <h1 class="fw-bold mb-2">
+            Welcome, {{ current_user.name }}
+        </h1>
+
+        <p class="text-muted mb-0">
+            Explore upcoming treks, manage your bookings and plan your next adventure.
+        </p>
+
+    </div>
+
+
+    <!-- Flash messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+
+        {% if messages %}
+
+            {% for category, message in messages %}
+
+                <div
+                    class="alert alert-{{ category }}"
+                    role="alert"
+                >
+                    {{ message }}
+                </div>
+
+            {% endfor %}
+
+        {% endif %}
+
+    {% endwith %}
+
+
+    <!-- Statistics cards -->
+    <div class="row g-4 mb-5">
+
+        <div class="col-lg-4 col-md-6">
+
+            <div class="card h-100 shadow-sm border-0">
+
+                <div class="card-body p-4">
+
+                    <p class="text-muted mb-2">
+                        Available Treks
+                    </p>
+
+                    <h2 class="fw-bold mb-0">
+                        {{ available_treks_count }}
+                    </h2>
+
+                </div>
+
+            </div>
+
         </div>
 
-        <div class="row g-4">
 
-            <div class="col-lg-4 col-md-6">
-                <div class="dashboard-action-card h-100">
-                    <h4 class="fw-bold">
-                        Explore Treks
-                    </h4>
+        <div class="col-lg-4 col-md-6">
 
-                    <p class="text-muted">
-                        Discover available trekking opportunities.
+            <div class="card h-100 shadow-sm border-0">
+
+                <div class="card-body p-4">
+
+                    <p class="text-muted mb-2">
+                        Total Bookings
                     </p>
 
-                    <span class="badge text-bg-secondary">
-                        Coming soon
-                    </span>
+                    <h2 class="fw-bold mb-0">
+                        {{ total_bookings }}
+                    </h2>
+
                 </div>
+
             </div>
 
-            <div class="col-lg-4 col-md-6">
-                <div class="dashboard-action-card h-100">
-                    <h4 class="fw-bold">
-                        My Bookings
-                    </h4>
+        </div>
 
-                    <p class="text-muted">
-                        View and manage your current trek bookings.
+
+        <div class="col-lg-4 col-md-6">
+
+            <div class="card h-100 shadow-sm border-0">
+
+                <div class="card-body p-4">
+
+                    <p class="text-muted mb-2">
+                        Active Bookings
                     </p>
 
-                    <span class="badge text-bg-secondary">
-                        Coming soon
-                    </span>
+                    <h2 class="fw-bold mb-0">
+                        {{ active_bookings }}
+                    </h2>
+
                 </div>
-            </div>
 
-            <div class="col-lg-4 col-md-6">
-                <div class="dashboard-action-card h-100">
-                    <h4 class="fw-bold">
-                        Trek History
-                    </h4>
-
-                    <p class="text-muted">
-                        View completed and previously cancelled treks.
-                    </p>
-
-                    <span class="badge text-bg-secondary">
-                        Coming soon
-                    </span>
-                </div>
             </div>
 
         </div>
 
     </div>
-</section>
+
+
+    <!-- User actions -->
+    <div class="row g-4">
+
+        <!-- Explore treks -->
+        <div class="col-lg-6">
+
+            <div class="card h-100 shadow-sm border-0">
+
+                <div class="card-body p-4 d-flex flex-column">
+
+                    <h3 class="fw-bold mb-3">
+                        Explore Available Treks
+                    </h3>
+
+                    <p class="text-muted">
+                        Browse open upcoming treks, check locations, difficulty,
+                        dates and available slots.
+                    </p>
+
+                    <div class="mt-auto">
+
+                        <a
+                            href="{{ url_for('available_treks') }}"
+                            class="btn btn-success"
+                        >
+                            View Available Treks
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- My bookings -->
+        <div class="col-lg-6">
+
+            <div class="card h-100 shadow-sm border-0">
+
+                <div class="card-body p-4 d-flex flex-column">
+
+                    <h3 class="fw-bold mb-3">
+                        My Bookings
+                    </h3>
+
+                    <p class="text-muted">
+                        View your confirmed and cancelled trek bookings and
+                        manage active reservations.
+                    </p>
+
+                    <div class="mt-auto">
+
+                        <a
+                            href="{{ url_for('my_bookings') }}"
+                            class="btn btn-success"
+                        >
+                            View My Bookings
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
 
 {% endblock %}

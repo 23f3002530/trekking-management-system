@@ -4,76 +4,143 @@
 
 {% block content %}
 
-<section class="dashboard-section py-5">
-    <div class="container">
+<div class="container py-5">
 
-        <div class="mb-5">
-            <p class="dashboard-label mb-2">
-                TREK STAFF PANEL
-            </p>
+    <!-- Welcome Section -->
+    <div class="row mb-4">
 
-            <h1 class="fw-bold mb-2">
-                Welcome, {{ current_user.name }}
-            </h1>
+        <div class="col">
 
-            <p class="text-muted mb-0">
-                View your assigned treks and manage trek-related activities.
-            </p>
-        </div>
+            <div class="card shadow-sm border-0">
 
-        <div class="row g-4">
+                <div class="card-body">
 
-            <div class="col-lg-4 col-md-6">
-                <div class="dashboard-action-card h-100">
-                    <h4 class="fw-bold">
-                        Assigned Treks
-                    </h4>
+                    <h2 class="fw-bold">
+                        Welcome, {{ current_user.name }}
+                    </h2>
 
-                    <p class="text-muted">
-                        View the treks assigned to you by the administrator.
+                    <p class="text-muted mb-0">
+                        Manage your assigned treks and view participant details.
                     </p>
 
-                    <span class="badge text-bg-secondary">
-                        Coming soon
-                    </span>
                 </div>
-            </div>
 
-            <div class="col-lg-4 col-md-6">
-                <div class="dashboard-action-card h-100">
-                    <h4 class="fw-bold">
-                        Trek Participants
-                    </h4>
-
-                    <p class="text-muted">
-                        View the participants registered for assigned treks.
-                    </p>
-
-                    <span class="badge text-bg-secondary">
-                        Coming soon
-                    </span>
-                </div>
-            </div>
-
-            <div class="col-lg-4 col-md-6">
-                <div class="dashboard-action-card h-100">
-                    <h4 class="fw-bold">
-                        Trek Updates
-                    </h4>
-
-                    <p class="text-muted">
-                        Update progress and important information about treks.
-                    </p>
-
-                    <span class="badge text-bg-secondary">
-                        Coming soon
-                    </span>
-                </div>
             </div>
 
         </div>
 
     </div>
-</section>
+
+
+    <!-- Statistics -->
+    <div class="row g-4 mb-5">
+
+        <div class="col-md-4">
+
+            <div class="card shadow-sm border-0 text-center h-100">
+
+                <div class="card-body">
+
+                    <h5 class="text-muted">
+                        Assigned Treks
+                    </h5>
+
+                    <h1 class="display-5 fw-bold text-primary">
+                        {{ assigned_count }}
+                    </h1>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-4">
+
+            <div class="card shadow-sm border-0 text-center h-100">
+
+                <div class="card-body">
+
+                    <h5 class="text-muted">
+                        Upcoming Treks
+                    </h5>
+
+                    <h1 class="display-5 fw-bold text-success">
+                        {{ upcoming_count }}
+                    </h1>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-4">
+
+            <div class="card shadow-sm border-0 text-center h-100">
+
+                <div class="card-body">
+
+                    <h5 class="text-muted">
+                        Completed Treks
+                    </h5>
+
+                    <h1 class="display-5 fw-bold text-danger">
+                        {{ completed_count }}
+                    </h1>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Quick Actions -->
+    <div class="row">
+
+        <div class="col">
+
+            <div class="card shadow-sm border-0">
+
+                <div class="card-header bg-dark text-white">
+
+                    <h5 class="mb-0">
+                        Quick Actions
+                    </h5>
+
+                </div>
+
+                <div class="card-body">
+
+                    <div class="d-flex flex-wrap gap-3">
+
+                        <a
+                            href="{{ url_for('assigned_treks') }}"
+                            class="btn btn-primary"
+                        >
+                            View Assigned Treks
+                        </a>
+
+                        <a
+                            href="{{ url_for('logout') }}"
+                            class="btn btn-outline-danger"
+                        >
+                            Logout
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
 
 {% endblock %}

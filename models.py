@@ -3,28 +3,71 @@ from datetime import datetime
 from flask_login import UserMixin
 from flask_sqlalchemy import SQLAlchemy
 
+
 db = SQLAlchemy()
 
+
+# --------------------------------------------------
+# User Model
+# --------------------------------------------------
 
 class User(UserMixin, db.Model):
     __tablename__ = "user"
 
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100), nullable=False)
-    email = db.Column(db.String(120), unique=True, nullable=False)
-    password_hash = db.Column(db.String(255), nullable=False)
-    contact = db.Column(db.String(15), nullable=False)
-    role = db.Column(db.String(20), nullable=False)
-    is_approved = db.Column(db.Boolean, default=False)
-    is_blacklisted = db.Column(db.Boolean, default=False)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    id = db.Column(
+        db.Integer,
+        primary_key=True
+    )
 
+    name = db.Column(
+        db.String(100),
+        nullable=False
+    )
+
+    email = db.Column(
+        db.String(120),
+        unique=True,
+        nullable=False
+    )
+
+    password_hash = db.Column(
+        db.String(255),
+        nullable=False
+    )
+
+    contact = db.Column(
+        db.String(15),
+        nullable=False
+    )
+
+    role = db.Column(
+        db.String(20),
+        nullable=False
+    )
+
+    is_approved = db.Column(
+        db.Boolean,
+        default=False
+    )
+
+    is_blacklisted = db.Column(
+        db.Boolean,
+        default=False
+    )
+
+    created_at = db.Column(
+        db.DateTime,
+        default=datetime.utcnow
+    )
+
+    # Treks assigned to a staff member
     assigned_treks = db.relationship(
         "Trek",
         backref="assigned_staff",
         lazy=True
     )
 
+    # Bookings made by a user
     bookings = db.relationship(
         "Booking",
         backref="user",
@@ -32,21 +75,68 @@ class User(UserMixin, db.Model):
     )
 
 
+# --------------------------------------------------
+# Trek Model
+# --------------------------------------------------
+
 class Trek(db.Model):
     __tablename__ = "trek"
 
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100), nullable=False)
-    location = db.Column(db.String(100), nullable=False)
-    difficulty = db.Column(db.String(30), nullable=False)
-    duration = db.Column(db.Integer, nullable=False)
-    maximum_slots = db.Column(db.Integer, nullable=False)
-    available_slots = db.Column(db.Integer, nullable=False)
-    status = db.Column(db.String(20), default="Pending")
-    start_date = db.Column(db.Date, nullable=False)
-    end_date = db.Column(db.Date, nullable=False)
-    description = db.Column(db.Text)
+    id = db.Column(
+        db.Integer,
+        primary_key=True
+    )
 
+    name = db.Column(
+        db.String(100),
+        nullable=False
+    )
+
+    location = db.Column(
+        db.String(100),
+        nullable=False
+    )
+
+    difficulty = db.Column(
+        db.String(30),
+        nullable=False
+    )
+
+    duration = db.Column(
+        db.Integer,
+        nullable=False
+    )
+
+    maximum_slots = db.Column(
+        db.Integer,
+        nullable=False
+    )
+
+    available_slots = db.Column(
+        db.Integer,
+        nullable=False
+    )
+
+    status = db.Column(
+        db.String(20),
+        default="Pending"
+    )
+
+    start_date = db.Column(
+        db.Date,
+        nullable=False
+    )
+
+    end_date = db.Column(
+        db.Date,
+        nullable=False
+    )
+
+    description = db.Column(
+        db.Text
+    )
+
+    # Staff member assigned to the trek
     assigned_staff_id = db.Column(
         db.Integer,
         db.ForeignKey("user.id")
@@ -57,6 +147,7 @@ class Trek(db.Model):
         default=datetime.utcnow
     )
 
+    # Bookings associated with the trek
     bookings = db.relationship(
         "Booking",
         backref="trek",
@@ -64,10 +155,17 @@ class Trek(db.Model):
     )
 
 
+# --------------------------------------------------
+# Booking Model
+# --------------------------------------------------
+
 class Booking(db.Model):
     __tablename__ = "booking"
 
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(
+        db.Integer,
+        primary_key=True
+    )
 
     user_id = db.Column(
         db.Integer,
@@ -86,11 +184,22 @@ class Booking(db.Model):
         default=datetime.utcnow
     )
 
+    # Booking status:
+    # Confirmed or Cancelled
     status = db.Column(
         db.String(20),
         default="Booked"
     )
 
+    # Attendance status:
+    # Pending, Present or Absent
+    attendance_status = db.Column(
+        db.String(20),
+        default="Pending"
+    )
+
+    # Prevent the same user from creating
+    # multiple bookings for the same trek
     __table_args__ = (
         db.UniqueConstraint(
             "user_id",

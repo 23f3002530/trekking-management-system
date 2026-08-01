@@ -3,7 +3,11 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
     <title>
         {% block title %}TrekConnect{% endblock %}
@@ -22,10 +26,20 @@
 
 <body>
 
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow">
+    <nav
+        class="navbar navbar-expand-lg navbar-dark
+        {% if request.endpoint in ['home', 'login', 'register'] %}
+            transparent-navbar
+        {% else %}
+            inner-navbar
+        {% endif %}"
+    >
         <div class="container">
 
-            <a class="navbar-brand fw-bold" href="{{ url_for('home') }}">
+            <a
+                class="navbar-brand fw-bold"
+                href="{{ url_for('home') }}"
+            >
                 TrekConnect
             </a>
 
@@ -33,6 +47,7 @@
 
                 {% if current_user.is_authenticated %}
 
+                    <!-- Dashboard -->
                     <a
                         href="{{ url_for('dashboard') }}"
                         class="btn btn-success me-3"
@@ -40,10 +55,36 @@
                         Dashboard
                     </a>
 
-                    <span class="text-white me-3">
+
+                    <!-- Logged-in User Name -->
+                    <span class="navbar-user-name text-white me-2">
                         Hello, {{ current_user.name }}
                     </span>
 
+
+                    <!-- Role Badge -->
+                    {% if current_user.role == "admin" %}
+
+                        <span class="badge bg-danger me-3">
+                            Admin
+                        </span>
+
+                    {% elif current_user.role == "staff" %}
+
+                        <span class="badge bg-warning text-dark me-3">
+                            Staff
+                        </span>
+
+                    {% elif current_user.role == "user" %}
+
+                        <span class="badge bg-success me-3">
+                            Trekker
+                        </span>
+
+                    {% endif %}
+
+
+                    <!-- Logout -->
                     <a
                         href="{{ url_for('logout') }}"
                         class="btn btn-outline-light"
@@ -74,9 +115,20 @@
         </div>
     </nav>
 
+
+    <!-- Flash Messages -->
     {% with messages = get_flashed_messages(with_categories=true) %}
+
         {% if messages %}
-            <div class="container mt-3">
+
+            <div
+                class="flash-message-container
+                {% if request.endpoint in ['home', 'login', 'register'] %}
+                    floating-flash-messages
+                {% else %}
+                    container mt-3
+                {% endif %}"
+            >
 
                 {% for category, message in messages %}
 
@@ -87,20 +139,32 @@
                 {% endfor %}
 
             </div>
+
         {% endif %}
+
     {% endwith %}
 
+
+    <!-- Main Content -->
     <main>
+
         {% block content %}
         {% endblock %}
+
     </main>
 
+
+    <!-- Footer -->
     <footer class="text-center py-3">
+
         <div class="container">
+
             <p class="mb-0">
                 © 2026 TrekConnect. All Rights Reserved.
             </p>
+
         </div>
+
     </footer>
 
 </body>

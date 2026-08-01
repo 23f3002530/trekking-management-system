@@ -1,0 +1,391 @@
+{% extends "base.html" %}
+
+{% block title %}Participants | TrekConnect{% endblock %}
+
+{% block content %}
+
+<div class="container py-5">
+
+    <!-- Page Heading -->
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
+
+        <div>
+
+            <h2 class="fw-bold mb-1">
+                Trek Participants
+            </h2>
+
+            <p class="text-muted mb-0">
+                {{ trek.name }} | {{ trek.location }}
+            </p>
+
+        </div>
+
+        <a
+            href="{{ url_for('assigned_treks') }}"
+            class="btn btn-outline-secondary"
+        >
+            Back to Assigned Treks
+        </a>
+
+    </div>
+
+
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+
+        {% if messages %}
+
+            {% for category, message in messages %}
+
+                <div
+                    class="alert alert-{{ category }}"
+                    role="alert"
+                >
+                    {{ message }}
+                </div>
+
+            {% endfor %}
+
+        {% endif %}
+
+    {% endwith %}
+
+
+    <!-- Trek Information -->
+    <div class="card shadow-sm mb-4">
+
+        <div class="card-header bg-dark text-white">
+
+            <h5 class="mb-0">
+                Trek Details
+            </h5>
+
+        </div>
+
+        <div class="card-body">
+
+            <div class="row g-3">
+
+                <!-- Difficulty -->
+                <div class="col-md-4">
+
+                    <strong>Difficulty</strong>
+
+                    <br>
+
+                    {% if trek.difficulty == "Easy" %}
+
+                        <span class="badge bg-success">
+                            Easy
+                        </span>
+
+                    {% elif trek.difficulty == "Moderate" %}
+
+                        <span class="badge bg-warning text-dark">
+                            Moderate
+                        </span>
+
+                    {% else %}
+
+                        <span class="badge bg-danger">
+                            Hard
+                        </span>
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- Duration -->
+                <div class="col-md-4">
+
+                    <strong>Duration</strong>
+
+                    <br>
+
+                    {{ trek.duration }}
+                    day{% if trek.duration != 1 %}s{% endif %}
+
+                </div>
+
+
+                <!-- Status -->
+                <div class="col-md-4">
+
+                    <strong>Status</strong>
+
+                    <br>
+
+                    {% if trek.status == "Open" %}
+
+                        <span class="badge bg-success">
+                            Open
+                        </span>
+
+                    {% else %}
+
+                        <span class="badge bg-secondary">
+                            Closed
+                        </span>
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- Start Date -->
+                <div class="col-md-6">
+
+                    <strong>Start Date</strong>
+
+                    <br>
+
+                    {{ trek.start_date.strftime("%d %b %Y") }}
+
+                </div>
+
+
+                <!-- End Date -->
+                <div class="col-md-6">
+
+                    <strong>End Date</strong>
+
+                    <br>
+
+                    {{ trek.end_date.strftime("%d %b %Y") }}
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Participant List -->
+    {% if bookings %}
+
+        <div class="card shadow-sm">
+
+            <div class="card-header bg-primary text-white">
+
+                <div class="d-flex justify-content-between align-items-center">
+
+                    <h5 class="mb-0">
+                        Confirmed Participants
+                    </h5>
+
+                    <span class="badge bg-light text-dark">
+                        Total: {{ bookings|length }}
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="card-body p-0">
+
+                <div class="table-responsive">
+
+                    <table class="table table-bordered table-hover align-middle mb-0">
+
+                        <thead class="table-dark">
+
+                            <tr>
+
+                                <th>#</th>
+
+                                <th>Name</th>
+
+                                <th>Email</th>
+
+                                <th>Contact</th>
+
+                                <th>Booking Date</th>
+
+                                <th>Booking Status</th>
+
+                                <th>Attendance</th>
+
+                                <th>Actions</th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody>
+
+                            {% for booking in bookings %}
+
+                                <tr>
+
+                                    <!-- Serial Number -->
+                                    <td>
+                                        {{ loop.index }}
+                                    </td>
+
+
+                                    <!-- Participant Name -->
+                                    <td>
+
+                                        <strong>
+                                            {{ booking.user.name }}
+                                        </strong>
+
+                                    </td>
+
+
+                                    <!-- Email -->
+                                    <td>
+                                        {{ booking.user.email }}
+                                    </td>
+
+
+                                    <!-- Contact -->
+                                    <td>
+                                        {{ booking.user.contact }}
+                                    </td>
+
+
+                                    <!-- Booking Date -->
+                                    <td>
+
+                                        {{ booking.booking_date.strftime("%d %b %Y") }}
+
+                                    </td>
+
+
+                                    <!-- Booking Status -->
+                                    <td>
+
+                                        <span class="badge bg-success">
+                                            {{ booking.status }}
+                                        </span>
+
+                                    </td>
+
+
+                                    <!-- Attendance Status -->
+                                    <td>
+
+                                        {% if booking.attendance_status == "Present" %}
+
+                                            <span class="badge bg-success">
+                                                Present
+                                            </span>
+
+                                        {% elif booking.attendance_status == "Absent" %}
+
+                                            <span class="badge bg-danger">
+                                                Absent
+                                            </span>
+
+                                        {% else %}
+
+                                            <span class="badge bg-warning text-dark">
+                                                Pending
+                                            </span>
+
+                                        {% endif %}
+
+                                    </td>
+
+
+                                    <!-- Attendance Actions -->
+                                    <td>
+
+                                        <div class="d-flex flex-wrap gap-2">
+
+
+                                            <!-- Mark Present -->
+                                            <form
+                                                method="POST"
+                                                action="{{ url_for(
+                                                    'mark_attendance',
+                                                    booking_id=booking.id,
+                                                    attendance_status='Present'
+                                                ) }}"
+                                            >
+
+                                                <button
+                                                    type="submit"
+                                                    class="btn btn-sm btn-success"
+                                                    {% if booking.attendance_status == "Present" %}
+                                                        disabled
+                                                    {% endif %}
+                                                >
+                                                    Present
+                                                </button>
+
+                                            </form>
+
+
+                                            <!-- Mark Absent -->
+                                            <form
+                                                method="POST"
+                                                action="{{ url_for(
+                                                    'mark_attendance',
+                                                    booking_id=booking.id,
+                                                    attendance_status='Absent'
+                                                ) }}"
+                                            >
+
+                                                <button
+                                                    type="submit"
+                                                    class="btn btn-sm btn-danger"
+                                                    {% if booking.attendance_status == "Absent" %}
+                                                        disabled
+                                                    {% endif %}
+                                                >
+                                                    Absent
+                                                </button>
+
+                                            </form>
+
+                                        </div>
+
+                                    </td>
+
+                                </tr>
+
+                            {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+    {% else %}
+
+        <!-- No Participants -->
+        <div class="card shadow-sm">
+
+            <div class="card-body text-center py-5">
+
+                <h4 class="fw-bold mb-3">
+                    No Participants Yet
+                </h4>
+
+                <p class="text-muted mb-0">
+                    No users have confirmed bookings for this trek.
+                </p>
+
+            </div>
+
+        </div>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}
