@@ -331,9 +331,11 @@
 
                                     <!-- Trek Name -->
                                     <td>
+
                                         <strong>
                                             {{ report.trek.name }}
                                         </strong>
+
                                     </td>
 
 
@@ -358,16 +360,32 @@
                                                 Open
                                             </span>
 
+
+                                        {% elif report.trek.status == "Closed" %}
+
+                                            <span class="badge bg-secondary">
+                                                Closed
+                                            </span>
+
+
+                                        {% elif report.trek.status == "Started" %}
+
+                                            <span class="badge bg-warning text-dark">
+                                                Started
+                                            </span>
+
+
                                         {% elif report.trek.status == "Completed" %}
 
                                             <span class="badge bg-primary">
                                                 Completed
                                             </span>
 
+
                                         {% else %}
 
                                             <span class="badge bg-secondary">
-                                                Closed
+                                                {{ report.trek.status }}
                                             </span>
 
                                         {% endif %}

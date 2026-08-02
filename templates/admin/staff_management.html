@@ -5,11 +5,14 @@
 {% block content %}
 
 <section class="dashboard-section py-5">
+
     <div class="container">
 
+        <!-- Page Heading -->
         <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
 
             <div>
+
                 <p class="dashboard-label mb-2">
                     ADMIN PANEL
                 </p>
@@ -19,8 +22,9 @@
                 </h1>
 
                 <p class="text-muted mb-0">
-                    Review, approve and manage registered trek staff accounts.
+                    Review, search, approve and manage registered trek staff accounts.
                 </p>
+
             </div>
 
             <a
@@ -32,7 +36,86 @@
 
         </div>
 
+
+        <!-- Search Section -->
+        <div class="card border-0 shadow-sm mb-4">
+
+            <div class="card-header bg-dark text-white">
+
+                <h5 class="mb-0">
+                    Search Trek Staff
+                </h5>
+
+            </div>
+
+            <div class="card-body">
+
+                <form
+                    method="GET"
+                    action="{{ url_for('manage_staff') }}"
+                >
+
+                    <div class="row g-3 align-items-end">
+
+                        <!-- Search Input -->
+                        <div class="col-lg-8 col-md-7">
+
+                            <label
+                                for="search"
+                                class="form-label fw-semibold"
+                            >
+                                Search by Name or Staff ID
+                            </label>
+
+                            <input
+                                type="text"
+                                class="form-control"
+                                id="search"
+                                name="search"
+                                value="{{ search }}"
+                                placeholder="Enter staff name or staff ID"
+                            >
+
+                        </div>
+
+
+                        <!-- Search Button -->
+                        <div class="col-lg-2 col-md-2">
+
+                            <button
+                                type="submit"
+                                class="btn btn-success w-100"
+                            >
+                                Search
+                            </button>
+
+                        </div>
+
+
+                        <!-- Clear Search -->
+                        <div class="col-lg-2 col-md-3">
+
+                            <a
+                                href="{{ url_for('manage_staff') }}"
+                                class="btn btn-outline-secondary w-100"
+                            >
+                                Clear
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+
+        <!-- Staff Table -->
         <div class="card border-0 shadow-sm">
+
             <div class="card-body p-0">
 
                 {% if staff_members %}
@@ -42,8 +125,14 @@
                         <table class="table table-hover align-middle mb-0">
 
                             <thead class="table-light">
+
                                 <tr>
+
                                     <th class="px-4 py-3">
+                                        Staff ID
+                                    </th>
+
+                                    <th class="py-3">
                                         Staff Member
                                     </th>
 
@@ -66,7 +155,9 @@
                                     <th class="px-4 py-3 text-end">
                                         Actions
                                     </th>
+
                                 </tr>
+
                             </thead>
 
                             <tbody>
@@ -75,7 +166,18 @@
 
                                     <tr>
 
+                                        <!-- Staff ID -->
                                         <td class="px-4 py-3">
+
+                                            <strong>
+                                                #{{ staff.id }}
+                                            </strong>
+
+                                        </td>
+
+
+                                        <!-- Staff Information -->
+                                        <td class="py-3">
 
                                             <p class="fw-bold mb-1">
                                                 {{ staff.name }}
@@ -87,10 +189,16 @@
 
                                         </td>
 
+
+                                        <!-- Contact -->
                                         <td class="py-3">
+
                                             {{ staff.contact }}
+
                                         </td>
 
+
+                                        <!-- Approval Status -->
                                         <td class="py-3">
 
                                             {% if staff.is_approved %}
@@ -109,6 +217,8 @@
 
                                         </td>
 
+
+                                        <!-- Account Status -->
                                         <td class="py-3">
 
                                             {% if staff.is_blacklisted %}
@@ -127,70 +237,109 @@
 
                                         </td>
 
+
+                                        <!-- Registration Date -->
                                         <td class="py-3">
-                                            {{ staff.created_at.strftime("%d %b %Y") }}
+
+                                            {% if staff.created_at %}
+
+                                                {{ staff.created_at.strftime("%d %b %Y") }}
+
+                                            {% else %}
+
+                                                Not available
+
+                                            {% endif %}
+
                                         </td>
 
+
+                                        <!-- Actions -->
                                         <td class="px-4 py-3">
 
                                             <div class="d-flex justify-content-end flex-wrap gap-2">
 
                                                 {% if staff.is_blacklisted %}
 
+                                                    <!-- Unblock Staff -->
                                                     <form
                                                         method="POST"
-                                                        action="{{ url_for('unblock_staff', staff_id=staff.id) }}"
+                                                        action="{{ url_for(
+                                                            'unblock_staff',
+                                                            staff_id=staff.id
+                                                        ) }}"
                                                     >
+
                                                         <button
                                                             type="submit"
                                                             class="btn btn-sm btn-outline-success"
                                                         >
                                                             Unblock
                                                         </button>
+
                                                     </form>
 
                                                 {% else %}
 
                                                     {% if staff.is_approved %}
 
+                                                        <!-- Revoke Approval -->
                                                         <form
                                                             method="POST"
-                                                            action="{{ url_for('revoke_staff', staff_id=staff.id) }}"
+                                                            action="{{ url_for(
+                                                                'revoke_staff',
+                                                                staff_id=staff.id
+                                                            ) }}"
                                                         >
+
                                                             <button
                                                                 type="submit"
                                                                 class="btn btn-sm btn-outline-warning"
                                                             >
                                                                 Revoke Approval
                                                             </button>
+
                                                         </form>
 
                                                     {% else %}
 
+                                                        <!-- Approve Staff -->
                                                         <form
                                                             method="POST"
-                                                            action="{{ url_for('approve_staff', staff_id=staff.id) }}"
+                                                            action="{{ url_for(
+                                                                'approve_staff',
+                                                                staff_id=staff.id
+                                                            ) }}"
                                                         >
+
                                                             <button
                                                                 type="submit"
                                                                 class="btn btn-sm btn-success"
                                                             >
                                                                 Approve
                                                             </button>
+
                                                         </form>
 
                                                     {% endif %}
 
+
+                                                    <!-- Block Staff -->
                                                     <form
                                                         method="POST"
-                                                        action="{{ url_for('block_staff', staff_id=staff.id) }}"
+                                                        action="{{ url_for(
+                                                            'block_staff',
+                                                            staff_id=staff.id
+                                                        ) }}"
                                                     >
+
                                                         <button
                                                             type="submit"
                                                             class="btn btn-sm btn-outline-danger"
                                                         >
                                                             Block
                                                         </button>
+
                                                     </form>
 
                                                 {% endif %}
@@ -209,26 +358,48 @@
 
                     </div>
 
+
                 {% else %}
 
+                    <!-- No Staff / No Search Results -->
                     <div class="text-center px-4 py-5">
 
                         <h4 class="fw-bold">
-                            No staff registrations found
+                            No Staff Members Found
                         </h4>
 
-                        <p class="text-muted mb-0">
-                            Staff accounts will appear here after registration.
-                        </p>
+                        {% if search %}
+
+                            <p class="text-muted mb-3">
+                                No registered staff member matches
+                                "{{ search }}".
+                            </p>
+
+                            <a
+                                href="{{ url_for('manage_staff') }}"
+                                class="btn btn-outline-success"
+                            >
+                                Clear Search
+                            </a>
+
+                        {% else %}
+
+                            <p class="text-muted mb-0">
+                                Staff accounts will appear here after registration.
+                            </p>
+
+                        {% endif %}
 
                     </div>
 
                 {% endif %}
 
             </div>
+
         </div>
 
     </div>
+
 </section>
 
 {% endblock %}

@@ -8,6 +8,7 @@
 
     <div class="container">
 
+        <!-- Page Heading -->
         <div
             class="d-flex justify-content-between
                    align-items-center flex-wrap gap-3 mb-4"
@@ -24,7 +25,7 @@
                 </h1>
 
                 <p class="text-muted mb-0">
-                    View and manage registered trekker accounts.
+                    View, search and manage registered trekker accounts.
                 </p>
 
             </div>
@@ -38,6 +39,84 @@
 
         </div>
 
+
+        <!-- Search Section -->
+        <div class="card border-0 shadow-sm mb-4">
+
+            <div class="card-header bg-dark text-white">
+
+                <h5 class="mb-0">
+                    Search Trekkers
+                </h5>
+
+            </div>
+
+            <div class="card-body">
+
+                <form
+                    method="GET"
+                    action="{{ url_for('manage_users') }}"
+                >
+
+                    <div class="row g-3 align-items-end">
+
+                        <!-- Search Input -->
+                        <div class="col-lg-8 col-md-7">
+
+                            <label
+                                for="search"
+                                class="form-label fw-semibold"
+                            >
+                                Search by Name or User ID
+                            </label>
+
+                            <input
+                                type="text"
+                                class="form-control"
+                                id="search"
+                                name="search"
+                                value="{{ search }}"
+                                placeholder="Enter trekker name or user ID"
+                            >
+
+                        </div>
+
+
+                        <!-- Search Button -->
+                        <div class="col-lg-2 col-md-2">
+
+                            <button
+                                type="submit"
+                                class="btn btn-success w-100"
+                            >
+                                Search
+                            </button>
+
+                        </div>
+
+
+                        <!-- Clear Search -->
+                        <div class="col-lg-2 col-md-3">
+
+                            <a
+                                href="{{ url_for('manage_users') }}"
+                                class="btn btn-outline-secondary w-100"
+                            >
+                                Clear
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+
+        <!-- User Table -->
         <div class="card border-0 shadow-sm">
 
             <div class="card-body p-0">
@@ -53,6 +132,10 @@
                                 <tr>
 
                                     <th class="px-4 py-3">
+                                        User ID
+                                    </th>
+
+                                    <th class="py-3">
                                         Trekker
                                     </th>
 
@@ -82,7 +165,18 @@
 
                                     <tr>
 
+                                        <!-- User ID -->
                                         <td class="px-4 py-3">
+
+                                            <strong>
+                                                #{{ user.id }}
+                                            </strong>
+
+                                        </td>
+
+
+                                        <!-- Trekker Information -->
+                                        <td class="py-3">
 
                                             <p class="fw-bold mb-1">
                                                 {{ user.name }}
@@ -94,10 +188,16 @@
 
                                         </td>
 
+
+                                        <!-- Contact -->
                                         <td class="py-3">
+
                                             {{ user.contact }}
+
                                         </td>
 
+
+                                        <!-- Account Status -->
                                         <td class="py-3">
 
                                             {% if user.is_blacklisted %}
@@ -116,6 +216,8 @@
 
                                         </td>
 
+
+                                        <!-- Registration Date -->
                                         <td class="py-3">
 
                                             {% if user.created_at %}
@@ -130,6 +232,8 @@
 
                                         </td>
 
+
+                                        <!-- Actions -->
                                         <td class="px-4 py-3">
 
                                             <div
@@ -193,17 +297,37 @@
 
                     </div>
 
+
                 {% else %}
 
+                    <!-- No Search Results -->
                     <div class="text-center px-4 py-5">
 
                         <h4 class="fw-bold">
-                            No registered trekkers found
+                            No Trekkers Found
                         </h4>
 
-                        <p class="text-muted mb-0">
-                            Trekker accounts will appear here after registration.
-                        </p>
+                        {% if search %}
+
+                            <p class="text-muted mb-3">
+                                No registered trekker matches
+                                "{{ search }}".
+                            </p>
+
+                            <a
+                                href="{{ url_for('manage_users') }}"
+                                class="btn btn-outline-success"
+                            >
+                                Clear Search
+                            </a>
+
+                        {% else %}
+
+                            <p class="text-muted mb-0">
+                                Trekker accounts will appear here after registration.
+                            </p>
+
+                        {% endif %}
 
                     </div>
 

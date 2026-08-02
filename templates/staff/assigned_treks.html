@@ -85,19 +85,12 @@
                             <tr>
 
                                 <th>Name</th>
-
                                 <th>Location</th>
-
                                 <th>Difficulty</th>
-
                                 <th>Duration</th>
-
                                 <th>Dates</th>
-
                                 <th>Slots</th>
-
                                 <th>Status</th>
-
                                 <th>Actions</th>
 
                             </tr>
@@ -201,6 +194,12 @@
                                                 Open
                                             </span>
 
+                                        {% elif trek.status == "Started" %}
+
+                                            <span class="badge bg-warning text-dark">
+                                                Started
+                                            </span>
+
                                         {% elif trek.status == "Completed" %}
 
                                             <span class="badge bg-primary">
@@ -224,6 +223,22 @@
                                         <div class="d-flex flex-wrap gap-2">
 
 
+                                            <!-- Manage Trek -->
+                                            {% if trek.status in ["Open", "Closed"] %}
+
+                                                <a
+                                                    href="{{ url_for(
+                                                        'staff_manage_trek',
+                                                        trek_id=trek.id
+                                                    ) }}"
+                                                    class="btn btn-sm btn-warning"
+                                                >
+                                                    Manage Trek
+                                                </a>
+
+                                            {% endif %}
+
+
                                             <!-- View Participants -->
                                             <a
                                                 href="{{ url_for(
@@ -236,8 +251,41 @@
                                             </a>
 
 
+                                            <!-- Mark Trek Started -->
+                                            {% if trek.status in ["Open", "Closed"] %}
+
+                                                <form
+                                                    method="POST"
+                                                    action="{{ url_for(
+                                                        'start_trek',
+                                                        trek_id=trek.id
+                                                    ) }}"
+                                                >
+
+                                                    <button
+                                                        type="submit"
+                                                        class="btn btn-sm btn-warning"
+                                                    >
+                                                        Mark Started
+                                                    </button>
+
+                                                </form>
+
+                                            {% elif trek.status == "Started" %}
+
+                                                <button
+                                                    type="button"
+                                                    class="btn btn-sm btn-outline-warning"
+                                                    disabled
+                                                >
+                                                    Started
+                                                </button>
+
+                                            {% endif %}
+
+
                                             <!-- Mark Trek Completed -->
-                                            {% if trek.status != "Completed" %}
+                                            {% if trek.status == "Started" %}
 
                                                 <form
                                                     method="POST"
@@ -256,7 +304,7 @@
 
                                                 </form>
 
-                                            {% else %}
+                                            {% elif trek.status == "Completed" %}
 
                                                 <button
                                                     type="button"

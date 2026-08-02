@@ -72,6 +72,7 @@
 
         </div>
 
+
         <div class="card-body">
 
             <form
@@ -81,14 +82,15 @@
 
                 <div class="row g-3 align-items-end">
 
-                    <!-- Search -->
+
+                    <!-- Search by Trek Name or ID -->
                     <div class="col-lg-5 col-md-12">
 
                         <label
                             for="search"
                             class="form-label fw-semibold"
                         >
-                            Search
+                            Search by Trek Name or Trek ID
                         </label>
 
                         <input
@@ -97,7 +99,7 @@
                             id="search"
                             name="search"
                             value="{{ search }}"
-                            placeholder="Search by trek name or location"
+                            placeholder="Enter trek name or trek ID"
                         >
 
                     </div>
@@ -194,6 +196,15 @@
                             </option>
 
                             <option
+                                value="Started"
+                                {% if trek_status == "Started" %}
+                                    selected
+                                {% endif %}
+                            >
+                                Started
+                            </option>
+
+                            <option
                                 value="Completed"
                                 {% if trek_status == "Completed" %}
                                     selected
@@ -272,6 +283,7 @@
                         <thead class="table-dark">
 
                             <tr>
+                                <th>Trek ID</th>
                                 <th>Name</th>
                                 <th>Location</th>
                                 <th>Difficulty</th>
@@ -293,11 +305,21 @@
 
                                 <tr>
 
+                                    <!-- Trek ID -->
+                                    <td>
+                                        <span class="badge bg-secondary">
+                                            #{{ trek.id }}
+                                        </span>
+                                    </td>
+
+
                                     <!-- Trek Name -->
                                     <td>
+
                                         <strong>
                                             {{ trek.name }}
                                         </strong>
+
                                     </td>
 
 
@@ -361,6 +383,12 @@
                                                 Open
                                             </span>
 
+                                        {% elif trek.status == "Started" %}
+
+                                            <span class="badge bg-warning text-dark">
+                                                Started
+                                            </span>
+
                                         {% elif trek.status == "Completed" %}
 
                                             <span class="badge bg-primary">
@@ -380,17 +408,13 @@
 
                                     <!-- Start Date -->
                                     <td>
-
                                         {{ trek.start_date.strftime("%d %b %Y") }}
-
                                     </td>
 
 
                                     <!-- End Date -->
                                     <td>
-
                                         {{ trek.end_date.strftime("%d %b %Y") }}
-
                                     </td>
 
 
@@ -421,19 +445,23 @@
 
 
                                             <!-- Edit Trek -->
-                                            <a
-                                                href="{{ url_for(
-                                                    'edit_trek',
-                                                    trek_id=trek.id
-                                                ) }}"
-                                                class="btn btn-sm btn-warning"
-                                            >
-                                                Edit
-                                            </a>
+                                            {% if trek.status in ["Open", "Closed"] %}
+
+                                                <a
+                                                    href="{{ url_for(
+                                                        'edit_trek',
+                                                        trek_id=trek.id
+                                                    ) }}"
+                                                    class="btn btn-sm btn-warning"
+                                                >
+                                                    Edit
+                                                </a>
+
+                                            {% endif %}
 
 
                                             <!-- Open / Close Registration -->
-                                            {% if trek.status != "Completed" %}
+                                            {% if trek.status == "Open" %}
 
                                                 <form
                                                     method="POST"
@@ -443,29 +471,48 @@
                                                     ) }}"
                                                 >
 
-                                                    {% if trek.status == "Open" %}
-
-                                                        <button
-                                                            type="submit"
-                                                            class="btn btn-sm btn-secondary"
-                                                        >
-                                                            Close
-                                                        </button>
-
-                                                    {% else %}
-
-                                                        <button
-                                                            type="submit"
-                                                            class="btn btn-sm btn-success"
-                                                        >
-                                                            Open
-                                                        </button>
-
-                                                    {% endif %}
+                                                    <button
+                                                        type="submit"
+                                                        class="btn btn-sm btn-secondary"
+                                                    >
+                                                        Close
+                                                    </button>
 
                                                 </form>
 
-                                            {% else %}
+
+                                            {% elif trek.status == "Closed" %}
+
+                                                <form
+                                                    method="POST"
+                                                    action="{{ url_for(
+                                                        'toggle_trek_status',
+                                                        trek_id=trek.id
+                                                    ) }}"
+                                                >
+
+                                                    <button
+                                                        type="submit"
+                                                        class="btn btn-sm btn-success"
+                                                    >
+                                                        Open
+                                                    </button>
+
+                                                </form>
+
+
+                                            {% elif trek.status == "Started" %}
+
+                                                <button
+                                                    type="button"
+                                                    class="btn btn-sm btn-outline-warning"
+                                                    disabled
+                                                >
+                                                    Started
+                                                </button>
+
+
+                                            {% elif trek.status == "Completed" %}
 
                                                 <button
                                                     type="button"
@@ -479,23 +526,28 @@
 
 
                                             <!-- Assign Staff -->
-                                            <a
-                                                href="{{ url_for(
-                                                    'assign_staff',
-                                                    trek_id=trek.id
-                                                ) }}"
-                                                class="btn btn-sm btn-primary"
-                                            >
-                                                {% if trek.assigned_staff %}
-                                                    Change Staff
-                                                {% else %}
-                                                    Assign Staff
-                                                {% endif %}
-                                            </a>
+                                            {% if trek.status in ["Open", "Closed"] %}
+
+                                                <a
+                                                    href="{{ url_for(
+                                                        'assign_staff',
+                                                        trek_id=trek.id
+                                                    ) }}"
+                                                    class="btn btn-sm btn-primary"
+                                                >
+                                                    {% if trek.assigned_staff %}
+                                                        Change Staff
+                                                    {% else %}
+                                                        Assign Staff
+                                                    {% endif %}
+                                                </a>
+
+                                            {% endif %}
 
 
                                             <!-- Remove Staff -->
-                                            {% if trek.assigned_staff %}
+                                            {% if trek.assigned_staff
+                                                  and trek.status in ["Open", "Closed"] %}
 
                                                 <form
                                                     method="POST"
@@ -518,22 +570,26 @@
 
 
                                             <!-- Delete Trek -->
-                                            <form
-                                                method="POST"
-                                                action="{{ url_for(
-                                                    'delete_trek',
-                                                    trek_id=trek.id
-                                                ) }}"
-                                            >
+                                            {% if trek.status in ["Open", "Closed"] %}
 
-                                                <button
-                                                    type="submit"
-                                                    class="btn btn-sm btn-danger"
+                                                <form
+                                                    method="POST"
+                                                    action="{{ url_for(
+                                                        'delete_trek',
+                                                        trek_id=trek.id
+                                                    ) }}"
                                                 >
-                                                    Delete
-                                                </button>
 
-                                            </form>
+                                                    <button
+                                                        type="submit"
+                                                        class="btn btn-sm btn-danger"
+                                                    >
+                                                        Delete
+                                                    </button>
+
+                                                </form>
+
+                                            {% endif %}
 
                                         </div>
 

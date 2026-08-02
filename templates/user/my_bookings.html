@@ -11,7 +11,7 @@
         <div>
 
             <p class="text-success fw-bold text-uppercase mb-2">
-                Booking History
+                Booking & Trek History
             </p>
 
             <h1 class="fw-bold mb-2">
@@ -19,7 +19,7 @@
             </h1>
 
             <p class="text-muted mb-0">
-                View and manage all your trek reservations.
+                View your active bookings, cancelled reservations and trekking history.
             </p>
 
         </div>
@@ -79,6 +79,7 @@
                         <thead class="table-light">
 
                             <tr>
+
                                 <th class="px-4 py-3">
                                     Trek
                                 </th>
@@ -96,12 +97,17 @@
                                 </th>
 
                                 <th class="py-3">
-                                    Status
+                                    Booking Status
+                                </th>
+
+                                <th class="py-3">
+                                    Trek Status
                                 </th>
 
                                 <th class="px-4 py-3 text-end">
                                     Action
                                 </th>
+
                             </tr>
 
                         </thead>
@@ -113,6 +119,7 @@
 
                                 <tr>
 
+                                    <!-- Trek -->
                                     <td class="px-4 py-3">
 
                                         <strong>
@@ -127,11 +134,13 @@
                                     </td>
 
 
+                                    <!-- Location -->
                                     <td class="py-3">
                                         {{ booking.trek.location }}
                                     </td>
 
 
+                                    <!-- Trek Dates -->
                                     <td class="py-3">
 
                                         <div>
@@ -146,6 +155,7 @@
                                     </td>
 
 
+                                    <!-- Booking Date -->
                                     <td class="py-3">
 
                                         {% if booking.booking_date %}
@@ -161,6 +171,7 @@
                                     </td>
 
 
+                                    <!-- Booking Status -->
                                     <td class="py-3">
 
                                         {% if booking.status == "Confirmed" %}
@@ -173,6 +184,12 @@
 
                                             <span class="badge bg-secondary">
                                                 Cancelled
+                                            </span>
+
+                                        {% elif booking.status == "Completed" %}
+
+                                            <span class="badge bg-primary">
+                                                Completed
                                             </span>
 
                                         {% elif booking.status == "Pending" %}
@@ -192,13 +209,56 @@
                                     </td>
 
 
+                                    <!-- Trek Status -->
+                                    <td class="py-3">
+
+                                        {% if booking.trek.status == "Open" %}
+
+                                            <span class="badge bg-success">
+                                                Open
+                                            </span>
+
+                                        {% elif booking.trek.status == "Closed" %}
+
+                                            <span class="badge bg-secondary">
+                                                Closed
+                                            </span>
+
+                                        {% elif booking.trek.status == "Started" %}
+
+                                            <span class="badge bg-warning text-dark">
+                                                Started
+                                            </span>
+
+                                        {% elif booking.trek.status == "Completed" %}
+
+                                            <span class="badge bg-primary">
+                                                Completed
+                                            </span>
+
+                                        {% else %}
+
+                                            <span class="badge bg-secondary">
+                                                {{ booking.trek.status }}
+                                            </span>
+
+                                        {% endif %}
+
+                                    </td>
+
+
+                                    <!-- Action -->
                                     <td class="px-4 py-3 text-end">
 
-                                        {% if booking.status == "Confirmed" %}
+                                        {% if booking.status == "Confirmed"
+                                              and booking.trek.status == "Open" %}
 
                                             <form
                                                 method="POST"
-                                                action="{{ url_for('cancel_booking', booking_id=booking.id) }}"
+                                                action="{{ url_for(
+                                                    'cancel_booking',
+                                                    booking_id=booking.id
+                                                ) }}"
                                             >
 
                                                 <button
@@ -209,6 +269,23 @@
                                                 </button>
 
                                             </form>
+
+
+                                        {% elif booking.trek.status == "Started"
+                                                and booking.status != "Cancelled" %}
+
+                                            <span class="text-warning fw-semibold">
+                                                Trek Started
+                                            </span>
+
+
+                                        {% elif booking.trek.status == "Completed"
+                                                and booking.status != "Cancelled" %}
+
+                                            <span class="text-success fw-semibold">
+                                                Trek Completed
+                                            </span>
+
 
                                         {% else %}
 
@@ -233,6 +310,7 @@
             </div>
 
         </div>
+
 
     {% else %}
 
