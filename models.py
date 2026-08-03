@@ -7,10 +7,6 @@ from flask_sqlalchemy import SQLAlchemy
 db = SQLAlchemy()
 
 
-# --------------------------------------------------
-# User Model
-# --------------------------------------------------
-
 class User(UserMixin, db.Model):
     __tablename__ = "user"
 
@@ -60,24 +56,18 @@ class User(UserMixin, db.Model):
         default=datetime.utcnow
     )
 
-    # Treks assigned to a staff member
     assigned_treks = db.relationship(
         "Trek",
         backref="assigned_staff",
         lazy=True
     )
 
-    # Bookings made by a user
     bookings = db.relationship(
         "Booking",
         backref="user",
         lazy=True
     )
 
-
-# --------------------------------------------------
-# Trek Model
-# --------------------------------------------------
 
 class Trek(db.Model):
     __tablename__ = "trek"
@@ -136,7 +126,6 @@ class Trek(db.Model):
         db.Text
     )
 
-    # Staff member assigned to the trek
     assigned_staff_id = db.Column(
         db.Integer,
         db.ForeignKey("user.id")
@@ -147,17 +136,12 @@ class Trek(db.Model):
         default=datetime.utcnow
     )
 
-    # Bookings associated with the trek
     bookings = db.relationship(
         "Booking",
         backref="trek",
         lazy=True
     )
 
-
-# --------------------------------------------------
-# Booking Model
-# --------------------------------------------------
 
 class Booking(db.Model):
     __tablename__ = "booking"
@@ -184,22 +168,16 @@ class Booking(db.Model):
         default=datetime.utcnow
     )
 
-    # Booking status:
-    # Confirmed or Cancelled
     status = db.Column(
         db.String(20),
         default="Booked"
     )
 
-    # Attendance status:
-    # Pending, Present or Absent
     attendance_status = db.Column(
         db.String(20),
         default="Pending"
     )
 
-    # Prevent the same user from creating
-    # multiple bookings for the same trek
     __table_args__ = (
         db.UniqueConstraint(
             "user_id",

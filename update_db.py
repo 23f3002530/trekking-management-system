@@ -6,10 +6,10 @@ from models import db
 
 with app.app_context():
 
-    # Create any tables that do not already exist
+    
     db.create_all()
 
-    # Check the existing columns in the booking table
+    
     inspector = inspect(db.engine)
 
     booking_columns = [
@@ -17,7 +17,7 @@ with app.app_context():
         for column in inspector.get_columns("booking")
     ]
 
-    # Add attendance_status only if it does not already exist
+    
     if "attendance_status" not in booking_columns:
 
         db.session.execute(

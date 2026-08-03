@@ -6,7 +6,7 @@
 
 <div class="container py-5">
 
-    <!-- Page Heading -->
+    
     <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
 
         <div>
@@ -31,7 +31,7 @@
     </div>
 
 
-    <!-- Flash Messages -->
+    
     {% with messages = get_flashed_messages(with_categories=true) %}
 
         {% if messages %}
@@ -52,7 +52,7 @@
     {% endwith %}
 
 
-    <!-- Assigned Treks -->
+   
     {% if treks %}
 
         <div class="card shadow-sm">
@@ -104,7 +104,7 @@
 
                                 <tr>
 
-                                    <!-- Trek Name -->
+                                    
                                     <td>
 
                                         <strong>
@@ -114,13 +114,13 @@
                                     </td>
 
 
-                                    <!-- Location -->
+                                    
                                     <td>
                                         {{ trek.location }}
                                     </td>
 
 
-                                    <!-- Difficulty -->
+                                    
                                     <td>
 
                                         {% if trek.difficulty == "Easy" %}
@@ -146,7 +146,7 @@
                                     </td>
 
 
-                                    <!-- Duration -->
+                                    
                                     <td>
 
                                         {{ trek.duration }}
@@ -155,7 +155,7 @@
                                     </td>
 
 
-                                    <!-- Trek Dates -->
+                                    
                                     <td>
 
                                         {{ trek.start_date.strftime("%d %b %Y") }}
@@ -173,7 +173,7 @@
                                     </td>
 
 
-                                    <!-- Slots -->
+                                    
                                     <td>
 
                                         {{ trek.available_slots }}
@@ -185,7 +185,7 @@
                                     </td>
 
 
-                                    <!-- Trek Status -->
+                                   
                                     <td>
 
                                         {% if trek.status == "Open" %}
@@ -217,13 +217,13 @@
                                     </td>
 
 
-                                    <!-- Actions -->
+                                    
                                     <td>
 
                                         <div class="d-flex flex-wrap gap-2">
 
 
-                                            <!-- Manage Trek -->
+                                            
                                             {% if trek.status in ["Open", "Closed"] %}
 
                                                 <a
@@ -239,7 +239,7 @@
                                             {% endif %}
 
 
-                                            <!-- View Participants -->
+                                            
                                             <a
                                                 href="{{ url_for(
                                                     'view_participants',
@@ -251,7 +251,7 @@
                                             </a>
 
 
-                                            <!-- Mark Trek Started -->
+                                            
                                             {% if trek.status in ["Open", "Closed"] %}
 
                                                 <form
@@ -284,7 +284,7 @@
                                             {% endif %}
 
 
-                                            <!-- Mark Trek Completed -->
+                                           
                                             {% if trek.status == "Started" %}
 
                                                 <form
@@ -337,7 +337,7 @@
 
     {% else %}
 
-        <!-- No Assigned Treks -->
+        
         <div class="card shadow-sm">
 
             <div class="card-body text-center py-5">

@@ -21,9 +21,6 @@ app.config.from_object(Config)
 db.init_app(app)
 
 
-# --------------------------------------------------
-# Flask-Login configuration
-# --------------------------------------------------
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -37,9 +34,6 @@ def load_user(user_id):
     return db.session.get(User, int(user_id))
 
 
-# --------------------------------------------------
-# Role protection
-# --------------------------------------------------
 
 def role_required(required_role):
 
@@ -51,8 +45,7 @@ def role_required(required_role):
             if not current_user.is_authenticated:
                 return redirect(url_for("login"))
 
-            # Block blacklisted accounts on every protected request,
-            # even if the user already had an active login session.
+            
             if current_user.is_blacklisted:
 
                 logout_user()
@@ -74,8 +67,7 @@ def role_required(required_role):
 
                 return redirect(url_for("dashboard"))
 
-            # Staff must remain approved for every staff-protected route.
-            # This also handles approval being revoked during an active session.
+           
             if required_role == "staff" and not current_user.is_approved:
 
                 logout_user()
@@ -105,9 +97,7 @@ def get_dashboard_url(user):
     return url_for("user_dashboard")
 
 
-# --------------------------------------------------
-# Home
-# --------------------------------------------------
+
 
 @app.route("/")
 def home():
@@ -120,9 +110,8 @@ def dashboard():
     return redirect(get_dashboard_url(current_user))
 
 
-# --------------------------------------------------
-# Registration
-# --------------------------------------------------
+
+
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -229,9 +218,7 @@ def register():
     return render_template("register.html")
 
 
-# --------------------------------------------------
-# Login and logout
-# --------------------------------------------------
+
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -300,6 +287,74 @@ def login():
     return render_template("login.html")
 
 
+
+
+
+
+@app.route("/forgot-password", methods=["GET", "POST"])
+def forgot_password():
+
+    if current_user.is_authenticated:
+        return redirect(url_for("dashboard"))
+
+    if request.method == "POST":
+
+        email = request.form.get("email", "").strip().lower()
+        new_password = request.form.get("new_password", "")
+        confirm_password = request.form.get("confirm_password", "")
+
+        if not email or not new_password or not confirm_password:
+            flash("All fields are required.", "danger")
+            return redirect(url_for("forgot_password"))
+
+        if len(new_password) < 6:
+            flash(
+                "Password must contain at least 6 characters.",
+                "danger"
+            )
+            return redirect(url_for("forgot_password"))
+
+        if new_password != confirm_password:
+            flash(
+                "New password and confirm password do not match.",
+                "danger"
+            )
+            return redirect(url_for("forgot_password"))
+
+        user = User.query.filter(
+            db.func.lower(User.email) == email
+        ).first()
+
+        if user is None:
+            flash(
+                "No account was found with that email address.",
+                "danger"
+            )
+            return redirect(url_for("forgot_password"))
+
+        if user.role == "admin":
+            flash(
+                "Admin password cannot be reset from this page.",
+                "danger"
+            )
+            return redirect(url_for("forgot_password"))
+
+        user.password_hash = generate_password_hash(
+            new_password
+        )
+
+        db.session.commit()
+
+        flash(
+            "Password reset successfully. You can now log in.",
+            "success"
+        )
+
+        return redirect(url_for("login"))
+
+    return render_template("forgot_password.html")
+
+
 @app.route("/logout")
 @login_required
 def logout():
@@ -314,9 +369,7 @@ def logout():
     return redirect(url_for("home"))
 
 
-# --------------------------------------------------
-# Admin dashboard
-# --------------------------------------------------
+
 
 @app.route("/admin/dashboard")
 @login_required
@@ -361,27 +414,25 @@ def admin_dashboard():
     )
 
 
-# --------------------------------------------------
-# Admin staff management
-# --------------------------------------------------
+
 
 @app.route("/admin/staff")
 @login_required
 @role_required("admin")
 def manage_staff():
 
-    # Get search value from URL
+    
     search = request.args.get(
         "search",
         ""
     ).strip()
 
-    # Start with registered staff only
+                                      
     query = User.query.filter_by(
         role="staff"
     )
 
-    # Search by staff name or Staff ID
+                                      
     if search:
 
         if search.isdigit():
@@ -399,7 +450,7 @@ def manage_staff():
                 User.name.ilike(f"%{search}%")
             )
 
-    # Newest registered staff first
+                                   
     staff_members = (
         query
         .order_by(User.created_at.desc())
@@ -581,27 +632,27 @@ def unblock_staff(staff_id):
     return redirect(url_for("manage_staff"))
 
 
-# --------------------------------------------------
-# Admin user management
-# --------------------------------------------------
+                                                    
+                       
+                                                    
 
 @app.route("/admin/users")
 @login_required
 @role_required("admin")
 def manage_users():
 
-    # Get search value from URL
+                               
     search = request.args.get(
         "search",
         ""
     ).strip()
 
-    # Start with registered trekkers only
+                                         
     query = User.query.filter_by(
         role="user"
     )
 
-    # Search by trekker name or User ID
+                                       
     if search:
 
         if search.isdigit():
@@ -619,7 +670,7 @@ def manage_users():
                 User.name.ilike(f"%{search}%")
             )
 
-    # Newest registered users first
+                                   
     users = (
         query
         .order_by(User.created_at.desc())
@@ -711,16 +762,16 @@ def unblock_user(user_id):
     return redirect(url_for("manage_users"))
 
 
-# --------------------------------------------------
-# Admin trek management
-# --------------------------------------------------
+                                                    
+                       
+                                                    
 
 @app.route("/admin/treks")
 @login_required
 @role_required("admin")
 def manage_treks():
 
-    # Get search and filter values from the URL
+                                               
     search = request.args.get(
         "search",
         ""
@@ -736,10 +787,10 @@ def manage_treks():
         ""
     ).strip()
 
-    # Start with all treks
+                          
     query = Trek.query
 
-    # Search by Trek Name or Trek ID
+                                    
     if search:
 
         if search.isdigit():
@@ -757,7 +808,7 @@ def manage_treks():
                 Trek.name.ilike(f"%{search}%")
             )
 
-    # Filter by difficulty
+                          
     if difficulty in [
         "Easy",
         "Moderate",
@@ -768,7 +819,7 @@ def manage_treks():
             Trek.difficulty == difficulty
         )
 
-    # Filter by trek status
+                           
     if trek_status in [
         "Open",
         "Closed",
@@ -780,7 +831,7 @@ def manage_treks():
             Trek.status == trek_status
         )
 
-    # Show treks ordered by start date
+                                      
     treks = (
         query
         .order_by(Trek.start_date.asc())
@@ -1274,9 +1325,9 @@ def toggle_trek_status(trek_id):
     return redirect(url_for("manage_treks"))
 
 
-# --------------------------------------------------
-# Assign staff to trek
-# --------------------------------------------------
+                                                    
+                      
+                                                    
 
 @app.route(
     "/admin/treks/<int:trek_id>/assign",
@@ -1394,7 +1445,7 @@ def assign_staff(trek_id):
         staff_members=staff_members
     )
 
-#remove staff
+             
 @app.route("/admin/treks/<int:trek_id>/remove_staff", methods=["POST"])
 @login_required
 @role_required("admin")
@@ -1417,9 +1468,9 @@ def remove_staff(trek_id):
     )
 
     return redirect(url_for("manage_treks"))
-# --------------------------------------------------
-# Staff dashboard
-# --------------------------------------------------
+                                                    
+                 
+                                                    
 
 @app.route("/staff/dashboard")
 @login_required
@@ -1444,9 +1495,9 @@ def staff_dashboard():
         if trek.status == "Completed"
     )
 
-    # Required staff-dashboard information:
-    # show the number of registered users for each assigned trek.
-    # Cancelled bookings are not counted as registered participants.
+                                           
+                                                                 
+                                                                    
     trek_participant_data = []
 
     for trek in assigned_treks:
@@ -1486,9 +1537,9 @@ def assigned_treks():
         treks=treks
     )
 
-# --------------------------------------------------
-# Staff manage assigned trek
-# --------------------------------------------------
+                                                    
+                            
+                                                    
 
 @app.route(
     "/staff/treks/<int:trek_id>/manage",
@@ -1638,9 +1689,9 @@ def view_participants(trek_id):
     )
 
 
-# --------------------------------------------------
-# Staff attendance management
-# --------------------------------------------------
+                                                    
+                             
+                                                    
 
 @app.route(
     "/staff/bookings/<int:booking_id>/attendance/<attendance_status>",
@@ -1653,7 +1704,7 @@ def mark_attendance(booking_id, attendance_status):
     booking = db.get_or_404(Booking, booking_id)
     trek = booking.trek
 
-    # Only the staff member assigned to this trek can mark attendance
+                                                                     
     if trek.assigned_staff_id != current_user.id:
 
         flash(
@@ -1663,7 +1714,7 @@ def mark_attendance(booking_id, attendance_status):
 
         return redirect(url_for("assigned_treks"))
 
-    # Attendance can only be marked for confirmed bookings
+                                                          
     if booking.status != "Confirmed":
 
         flash(
@@ -1678,7 +1729,7 @@ def mark_attendance(booking_id, attendance_status):
             )
         )
 
-    # Only Present and Absent are valid attendance values
+                                                         
     if attendance_status not in ["Present", "Absent"]:
 
         flash(
@@ -1708,9 +1759,9 @@ def mark_attendance(booking_id, attendance_status):
         )
     )
 
-# --------------------------------------------------
-# Staff mark trek started
-# --------------------------------------------------
+                                                    
+                         
+                                                    
 
 @app.route(
     "/staff/treks/<int:trek_id>/start",
@@ -1760,9 +1811,9 @@ def start_trek(trek_id):
     return redirect(url_for("assigned_treks"))
 
 
-# --------------------------------------------------
-# Staff trek completion
-# --------------------------------------------------
+                                                    
+                       
+                                                    
 
 @app.route(
     "/staff/treks/<int:trek_id>/complete",
@@ -1827,8 +1878,8 @@ def complete_trek(trek_id):
             )
         )
 
-    # Mark the trek and all confirmed bookings as completed.
-    # The booking records remain in the database as trekking history.
+                                                            
+                                                                     
     trek.status = "Completed"
 
     for booking in confirmed_bookings:
@@ -1844,16 +1895,16 @@ def complete_trek(trek_id):
     return redirect(url_for("assigned_treks"))
 
 
-# --------------------------------------------------
-# Admin booking management
-# --------------------------------------------------
+                                                    
+                          
+                                                    
 
 @app.route("/admin/bookings")
 @login_required
 @role_required("admin")
 def manage_bookings():
 
-    # Get search and filter values from the URL
+                                               
     search = request.args.get(
         "search",
         ""
@@ -1869,11 +1920,11 @@ def manage_bookings():
         ""
     ).strip()
 
-    # Start with all bookings
+                             
     query = Booking.query
 
-    # Search by trekker name, email,
-    # trek name or trek location
+                                    
+                                
     if search:
 
         query = (
@@ -1890,14 +1941,14 @@ def manage_bookings():
             )
         )
 
-    # Filter by booking status
+                              
     if booking_status in ["Confirmed", "Cancelled", "Completed"]:
 
         query = query.filter(
             Booking.status == booking_status
         )
 
-    # Filter by attendance status
+                                 
     if attendance_status in [
         "Pending",
         "Present",
@@ -1908,7 +1959,7 @@ def manage_bookings():
             Booking.attendance_status == attendance_status
         )
 
-    # Newest bookings first
+                           
     bookings = (
         query
         .order_by(Booking.booking_date.desc())
@@ -1923,9 +1974,9 @@ def manage_bookings():
         attendance_status=attendance_status
     )
 
-# --------------------------------------------------
-# Admin reports
-# --------------------------------------------------
+                                                    
+               
+                                                    
 
 @app.route("/admin/reports")
 @login_required
@@ -2029,9 +2080,9 @@ def admin_reports():
     )
 
 
-# --------------------------------------------------
-# User dashboard and trek booking
-# --------------------------------------------------
+                                                    
+                                 
+                                                    
 
 @app.route("/user/dashboard")
 @login_required
@@ -2064,9 +2115,9 @@ def user_dashboard():
     )
 
 
-# --------------------------------------------------
-# User edit profile
-# --------------------------------------------------
+                                                    
+                   
+                                                    
 
 @app.route(
     "/user/profile/edit",
@@ -2102,7 +2153,7 @@ def edit_profile():
 
             return redirect(url_for("edit_profile"))
 
-        # Prevent another account from using the same email address.
+                                                                    
         existing_user = (
             User.query
             .filter(
@@ -2159,26 +2210,26 @@ def available_treks():
         ""
     ).strip()
 
-    # Only open, upcoming treks with available slots are shown.
+                                                               
     query = Trek.query.filter(
         Trek.status == "Open",
         Trek.available_slots > 0,
         Trek.start_date >= date.today()
     )
 
-    # Search specifically by trek name.
+                                       
     if search:
         query = query.filter(
             Trek.name.ilike(f"%{search}%")
         )
 
-    # Separate location filter.
+                               
     if location:
         query = query.filter(
             Trek.location.ilike(f"%{location}%")
         )
 
-    # Difficulty filter.
+                        
     if difficulty in [
         "Easy",
         "Moderate",
@@ -2194,8 +2245,8 @@ def available_treks():
         .all()
     )
 
-    # Keep cancelled bookings in history, but allow a cancelled trek
-    # to become bookable again if appropriate.
+                                                                    
+                                              
     bookings = Booking.query.filter_by(
         user_id=current_user.id
     ).all()
@@ -2333,9 +2384,7 @@ def cancel_booking(booking_id):
 
     trek = booking.trek
 
-    # A booking can be cancelled only before the trek has started.
-    # This backend check prevents manual POST requests from cancelling
-    # bookings for Started or Completed treks.
+    
     if trek.status in ["Started", "Completed"]:
         flash(
             "You cannot cancel a booking after the trek has started.",
@@ -2368,9 +2417,6 @@ def cancel_booking(booking_id):
     return redirect(url_for("my_bookings"))
 
 
-# --------------------------------------------------
-# Run application
-# --------------------------------------------------
 
 if __name__ == "__main__":
     app.run(debug=True)

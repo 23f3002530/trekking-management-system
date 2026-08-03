@@ -6,7 +6,7 @@
 
 <div class="container py-5">
 
-    <!-- Page Heading -->
+    
     <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4">
 
         <div>
@@ -47,7 +47,7 @@
     </div>
 
 
-    <!-- Flash Messages -->
+    
     {% with messages = get_flashed_messages(with_categories=true) %}
 
         {% if messages %}
@@ -68,7 +68,7 @@
     {% endwith %}
 
 
-    <!-- Search and Filter Section -->
+    
     <div class="card shadow-sm border-0 mb-4">
 
         <div class="card-header bg-dark text-white">
@@ -90,7 +90,7 @@
                 <div class="row g-3 align-items-end">
 
 
-                    <!-- Trek Name Search -->
+                    
                     <div class="col-lg-3 col-md-6">
 
                         <label
@@ -112,7 +112,7 @@
                     </div>
 
 
-                    <!-- Location Filter -->
+                    
                     <div class="col-lg-3 col-md-6">
 
                         <label
@@ -134,7 +134,7 @@
                     </div>
 
 
-                    <!-- Difficulty Filter -->
+                    
                     <div class="col-lg-3 col-md-6">
 
                         <label
@@ -186,7 +186,7 @@
                     </div>
 
 
-                    <!-- Apply -->
+                    
                     <div class="col-lg-3 col-md-6">
 
                         <button
@@ -201,7 +201,7 @@
                 </div>
 
 
-                <!-- Clear -->
+                
                 <div class="mt-3">
 
                     <a
@@ -220,7 +220,7 @@
     </div>
 
 
-    <!-- Trek Results -->
+    
     {% if treks %}
 
         <div class="d-flex justify-content-between align-items-center mb-3">
@@ -247,7 +247,7 @@
                         <div class="card-body p-4 d-flex flex-column">
 
 
-                            <!-- Status and Difficulty -->
+                            
                             <div class="d-flex justify-content-between align-items-start mb-3">
 
                                 <span class="badge bg-success">
@@ -278,13 +278,13 @@
                             </div>
 
 
-                            <!-- Trek Name -->
+                            
                             <h3 class="fw-bold mb-3">
                                 {{ trek.name }}
                             </h3>
 
 
-                            <!-- Description -->
+                            
                             <p class="text-muted mb-3">
 
                                 {% if trek.description %}
@@ -300,7 +300,7 @@
                             </p>
 
 
-                            <!-- Trek Details -->
+                            
                             <div class="mb-3">
 
                                 <p class="mb-2">
@@ -336,7 +336,7 @@
                             </div>
 
 
-                            <!-- Booking Section -->
+                            
                             <div class="mt-auto pt-3">
 
                                 {% if trek.id in booked_trek_ids %}
@@ -408,7 +408,7 @@
 
     {% else %}
 
-        <!-- No Search Results -->
+        
         <div class="card border-0 shadow-sm">
 
             <div class="card-body text-center py-5">

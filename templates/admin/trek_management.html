@@ -6,7 +6,6 @@
 
 <div class="container py-5">
 
-    <!-- Page Heading -->
     <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
 
         <div>
@@ -40,7 +39,6 @@
     </div>
 
 
-    <!-- Flash Messages -->
     {% with messages = get_flashed_messages(with_categories=true) %}
 
         {% if messages %}
@@ -61,7 +59,6 @@
     {% endwith %}
 
 
-    <!-- Search and Filter Section -->
     <div class="card shadow-sm mb-4">
 
         <div class="card-header bg-dark text-white">
@@ -83,7 +80,6 @@
                 <div class="row g-3 align-items-end">
 
 
-                    <!-- Search by Trek Name or ID -->
                     <div class="col-lg-5 col-md-12">
 
                         <label
@@ -105,7 +101,6 @@
                     </div>
 
 
-                    <!-- Difficulty Filter -->
                     <div class="col-lg-3 col-md-6">
 
                         <label
@@ -157,7 +152,6 @@
                     </div>
 
 
-                    <!-- Status Filter -->
                     <div class="col-lg-2 col-md-6">
 
                         <label
@@ -218,7 +212,6 @@
                     </div>
 
 
-                    <!-- Apply Button -->
                     <div class="col-lg-2 col-md-6">
 
                         <button
@@ -233,7 +226,6 @@
                 </div>
 
 
-                <!-- Clear Filters -->
                 <div class="mt-3">
 
                     <a
@@ -252,7 +244,6 @@
     </div>
 
 
-    <!-- Trek Table -->
     {% if treks %}
 
         <div class="card shadow-sm">
@@ -305,7 +296,6 @@
 
                                 <tr>
 
-                                    <!-- Trek ID -->
                                     <td>
                                         <span class="badge bg-secondary">
                                             #{{ trek.id }}
@@ -313,7 +303,6 @@
                                     </td>
 
 
-                                    <!-- Trek Name -->
                                     <td>
 
                                         <strong>
@@ -323,13 +312,11 @@
                                     </td>
 
 
-                                    <!-- Location -->
                                     <td>
                                         {{ trek.location }}
                                     </td>
 
 
-                                    <!-- Difficulty -->
                                     <td>
 
                                         {% if trek.difficulty == "Easy" %}
@@ -355,7 +342,6 @@
                                     </td>
 
 
-                                    <!-- Duration -->
                                     <td>
 
                                         {{ trek.duration }}
@@ -364,7 +350,6 @@
                                     </td>
 
 
-                                    <!-- Slots -->
                                     <td>
 
                                         {{ trek.available_slots }}
@@ -374,7 +359,6 @@
                                     </td>
 
 
-                                    <!-- Status -->
                                     <td>
 
                                         {% if trek.status == "Open" %}
@@ -406,19 +390,16 @@
                                     </td>
 
 
-                                    <!-- Start Date -->
                                     <td>
                                         {{ trek.start_date.strftime("%d %b %Y") }}
                                     </td>
 
 
-                                    <!-- End Date -->
                                     <td>
                                         {{ trek.end_date.strftime("%d %b %Y") }}
                                     </td>
 
 
-                                    <!-- Assigned Staff -->
                                     <td>
 
                                         {% if trek.assigned_staff %}
@@ -438,13 +419,11 @@
                                     </td>
 
 
-                                    <!-- Actions -->
                                     <td>
 
                                         <div class="d-flex flex-wrap gap-2">
 
 
-                                            <!-- Edit Trek -->
                                             {% if trek.status in ["Open", "Closed"] %}
 
                                                 <a
@@ -460,7 +439,6 @@
                                             {% endif %}
 
 
-                                            <!-- Open / Close Registration -->
                                             {% if trek.status == "Open" %}
 
                                                 <form
@@ -525,7 +503,6 @@
                                             {% endif %}
 
 
-                                            <!-- Assign Staff -->
                                             {% if trek.status in ["Open", "Closed"] %}
 
                                                 <a
@@ -545,7 +522,6 @@
                                             {% endif %}
 
 
-                                            <!-- Remove Staff -->
                                             {% if trek.assigned_staff
                                                   and trek.status in ["Open", "Closed"] %}
 
@@ -569,7 +545,6 @@
                                             {% endif %}
 
 
-                                            <!-- Delete Trek -->
                                             {% if trek.status in ["Open", "Closed"] %}
 
                                                 <form
@@ -612,7 +587,6 @@
 
     {% else %}
 
-        <!-- No Search Results -->
         <div class="card shadow-sm">
 
             <div class="card-body text-center py-5">

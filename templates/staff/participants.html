@@ -6,7 +6,7 @@
 
 <div class="container py-5">
 
-    <!-- Page Heading -->
+    
     <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
 
         <div>
@@ -31,7 +31,7 @@
     </div>
 
 
-    <!-- Flash Messages -->
+    
     {% with messages = get_flashed_messages(with_categories=true) %}
 
         {% if messages %}
@@ -52,7 +52,7 @@
     {% endwith %}
 
 
-    <!-- Trek Information -->
+    
     <div class="card shadow-sm mb-4">
 
         <div class="card-header bg-dark text-white">
@@ -67,7 +67,7 @@
 
             <div class="row g-3">
 
-                <!-- Difficulty -->
+                
                 <div class="col-md-4">
 
                     <strong>Difficulty</strong>
@@ -97,7 +97,7 @@
                 </div>
 
 
-                <!-- Duration -->
+                
                 <div class="col-md-4">
 
                     <strong>Duration</strong>
@@ -110,7 +110,7 @@
                 </div>
 
 
-                <!-- Status -->
+                
                 <div class="col-md-4">
 
                     <strong>Status</strong>
@@ -134,7 +134,7 @@
                 </div>
 
 
-                <!-- Start Date -->
+                
                 <div class="col-md-6">
 
                     <strong>Start Date</strong>
@@ -146,7 +146,7 @@
                 </div>
 
 
-                <!-- End Date -->
+                
                 <div class="col-md-6">
 
                     <strong>End Date</strong>
@@ -164,7 +164,7 @@
     </div>
 
 
-    <!-- Participant List -->
+    
     {% if bookings %}
 
         <div class="card shadow-sm">
@@ -223,13 +223,13 @@
 
                                 <tr>
 
-                                    <!-- Serial Number -->
+                                    
                                     <td>
                                         {{ loop.index }}
                                     </td>
 
 
-                                    <!-- Participant Name -->
+                                    
                                     <td>
 
                                         <strong>
@@ -239,19 +239,19 @@
                                     </td>
 
 
-                                    <!-- Email -->
+                                    
                                     <td>
                                         {{ booking.user.email }}
                                     </td>
 
 
-                                    <!-- Contact -->
+                                    
                                     <td>
                                         {{ booking.user.contact }}
                                     </td>
 
 
-                                    <!-- Booking Date -->
+                                    
                                     <td>
 
                                         {{ booking.booking_date.strftime("%d %b %Y") }}
@@ -259,7 +259,7 @@
                                     </td>
 
 
-                                    <!-- Booking Status -->
+                                    
                                     <td>
 
                                         <span class="badge bg-success">
@@ -269,7 +269,7 @@
                                     </td>
 
 
-                                    <!-- Attendance Status -->
+                                    
                                     <td>
 
                                         {% if booking.attendance_status == "Present" %}
@@ -295,13 +295,13 @@
                                     </td>
 
 
-                                    <!-- Attendance Actions -->
+                                    
                                     <td>
 
                                         <div class="d-flex flex-wrap gap-2">
 
 
-                                            <!-- Mark Present -->
+                                           
                                             <form
                                                 method="POST"
                                                 action="{{ url_for(
@@ -324,7 +324,7 @@
                                             </form>
 
 
-                                            <!-- Mark Absent -->
+                                            
                                             <form
                                                 method="POST"
                                                 action="{{ url_for(
@@ -367,7 +367,7 @@
 
     {% else %}
 
-        <!-- No Participants -->
+        
         <div class="card shadow-sm">
 
             <div class="card-body text-center py-5">

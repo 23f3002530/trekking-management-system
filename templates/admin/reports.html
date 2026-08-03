@@ -6,10 +6,10 @@
 
 <div class="container py-5">
 
-    <!-- Page Heading -->
     <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
 
         <div>
+
             <h2 class="fw-bold mb-1">
                 Reports
             </h2>
@@ -17,6 +17,7 @@
             <p class="text-muted mb-0">
                 View trek, booking and attendance statistics.
             </p>
+
         </div>
 
         <a
@@ -29,7 +30,6 @@
     </div>
 
 
-    <!-- Flash Messages -->
     {% with messages = get_flashed_messages(with_categories=true) %}
 
         {% if messages %}
@@ -50,7 +50,6 @@
     {% endwith %}
 
 
-    <!-- Trek Statistics -->
     <div class="mb-4">
 
         <h4 class="fw-bold mb-3">
@@ -59,7 +58,6 @@
 
         <div class="row g-4">
 
-            <!-- Total Treks -->
             <div class="col-md-6 col-lg-3">
 
                 <div class="card shadow-sm border-0 h-100">
@@ -81,7 +79,6 @@
             </div>
 
 
-            <!-- Open Treks -->
             <div class="col-md-6 col-lg-3">
 
                 <div class="card shadow-sm border-0 h-100">
@@ -103,7 +100,6 @@
             </div>
 
 
-            <!-- Closed Treks -->
             <div class="col-md-6 col-lg-3">
 
                 <div class="card shadow-sm border-0 h-100">
@@ -125,7 +121,6 @@
             </div>
 
 
-            <!-- Completed Treks -->
             <div class="col-md-6 col-lg-3">
 
                 <div class="card shadow-sm border-0 h-100">
@@ -151,7 +146,6 @@
     </div>
 
 
-    <!-- Booking Statistics -->
     <div class="mb-4">
 
         <h4 class="fw-bold mb-3">
@@ -160,7 +154,6 @@
 
         <div class="row g-4">
 
-            <!-- Confirmed Bookings -->
             <div class="col-md-6">
 
                 <div class="card shadow-sm border-0 h-100">
@@ -182,7 +175,6 @@
             </div>
 
 
-            <!-- Cancelled Bookings -->
             <div class="col-md-6">
 
                 <div class="card shadow-sm border-0 h-100">
@@ -208,7 +200,6 @@
     </div>
 
 
-    <!-- Attendance Statistics -->
     <div class="mb-5">
 
         <h4 class="fw-bold mb-3">
@@ -217,7 +208,6 @@
 
         <div class="row g-4">
 
-            <!-- Present -->
             <div class="col-md-4">
 
                 <div class="card shadow-sm border-0 h-100">
@@ -239,7 +229,6 @@
             </div>
 
 
-            <!-- Absent -->
             <div class="col-md-4">
 
                 <div class="card shadow-sm border-0 h-100">
@@ -261,7 +250,6 @@
             </div>
 
 
-            <!-- Pending -->
             <div class="col-md-4">
 
                 <div class="card shadow-sm border-0 h-100">
@@ -287,7 +275,6 @@
     </div>
 
 
-    <!-- Trek-wise Report -->
     <div class="card shadow-sm">
 
         <div class="card-header bg-dark text-white">
@@ -329,7 +316,6 @@
 
                                 <tr>
 
-                                    <!-- Trek Name -->
                                     <td>
 
                                         <strong>
@@ -339,19 +325,16 @@
                                     </td>
 
 
-                                    <!-- Location -->
                                     <td>
                                         {{ report.trek.location }}
                                     </td>
 
 
-                                    <!-- Start Date -->
                                     <td>
                                         {{ report.trek.start_date.strftime("%d %b %Y") }}
                                     </td>
 
 
-                                    <!-- Trek Status -->
                                     <td>
 
                                         {% if report.trek.status == "Open" %}
@@ -393,13 +376,11 @@
                                     </td>
 
 
-                                    <!-- Confirmed Participants -->
                                     <td>
                                         {{ report.confirmed_count }}
                                     </td>
 
 
-                                    <!-- Present -->
                                     <td>
 
                                         <span class="badge bg-success">
@@ -409,7 +390,6 @@
                                     </td>
 
 
-                                    <!-- Absent -->
                                     <td>
 
                                         <span class="badge bg-danger">
@@ -419,7 +399,6 @@
                                     </td>
 
 
-                                    <!-- Pending -->
                                     <td>
 
                                         <span class="badge bg-warning text-dark">
