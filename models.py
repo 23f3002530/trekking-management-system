@@ -68,6 +68,34 @@ class User(UserMixin, db.Model):
         lazy=True
     )
 
+    staff_profile = db.relationship(
+        "StaffProfile",
+        backref="user",
+        uselist=False,
+        cascade="all, delete-orphan"
+    )
+
+
+class StaffProfile(db.Model):
+    __tablename__ = "staff_profile"
+
+    id = db.Column(
+        db.Integer,
+        primary_key=True
+    )
+
+    user_id = db.Column(
+        db.Integer,
+        db.ForeignKey("user.id"),
+        unique=True,
+        nullable=False
+    )
+
+    created_at = db.Column(
+        db.DateTime,
+        default=datetime.utcnow
+    )
+
 
 class Trek(db.Model):
     __tablename__ = "trek"

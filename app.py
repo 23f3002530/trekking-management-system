@@ -12,7 +12,7 @@ from flask_login import (
 from werkzeug.security import check_password_hash, generate_password_hash
 
 from config import Config
-from models import Booking, Trek, User, db
+from models import Booking, StaffProfile, Trek, User, db
 
 
 app = Flask(__name__)
@@ -197,6 +197,16 @@ def register():
         )
 
         db.session.add(new_user)
+        db.session.flush()
+
+        if role == "staff":
+
+            staff_profile = StaffProfile(
+                user_id=new_user.id
+            )
+
+            db.session.add(staff_profile)
+
         db.session.commit()
 
         if role == "staff":
