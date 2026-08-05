@@ -6,7 +6,7 @@
 
 <div class="container py-5">
 
-    <!-- Page Heading -->
+    
     <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
 
         <div>
@@ -29,7 +29,7 @@
     </div>
 
 
-    <!-- Flash Messages -->
+    
     {% with messages = get_flashed_messages(with_categories=true) %}
 
         {% if messages %}
@@ -50,7 +50,7 @@
     {% endwith %}
 
 
-    <!-- Search and Filter Section -->
+    
     <div class="card shadow-sm mb-4">
 
         <div class="card-header bg-dark text-white">
@@ -71,7 +71,7 @@
                 <div class="row g-3 align-items-end">
 
 
-                    <!-- Search -->
+    
                     <div class="col-lg-5 col-md-12">
 
                         <label
@@ -93,7 +93,7 @@
                     </div>
 
 
-                    <!-- Booking Status -->
+    
                     <div class="col-lg-3 col-md-6">
 
                         <label
@@ -145,7 +145,7 @@
                     </div>
 
 
-                    <!-- Attendance Status -->
+                    
                     <div class="col-lg-2 col-md-6">
 
                         <label
@@ -197,7 +197,7 @@
                     </div>
 
 
-                    <!-- Apply -->
+                    
                     <div class="col-lg-2 col-md-6">
 
                         <button
@@ -212,7 +212,7 @@
                 </div>
 
 
-                <!-- Clear Filters -->
+                
                 <div class="mt-3">
 
                     <a
@@ -231,7 +231,7 @@
     </div>
 
 
-    <!-- Booking Results -->
+    
     {% if bookings %}
 
         <div class="card shadow-sm">
@@ -280,13 +280,13 @@
 
                                 <tr>
 
-                                    <!-- Booking ID -->
+                                    
                                     <td>
                                         #{{ booking.id }}
                                     </td>
 
 
-                                    <!-- Trekker -->
+                                    
                                     <td>
 
                                         <strong>
@@ -296,13 +296,13 @@
                                     </td>
 
 
-                                    <!-- Email -->
+                                    
                                     <td>
                                         {{ booking.user.email }}
                                     </td>
 
 
-                                    <!-- Trek -->
+                                    
                                     <td>
 
                                         <strong>
@@ -318,7 +318,7 @@
                                     </td>
 
 
-                                    <!-- Trek Date -->
+                                    
                                     <td>
 
                                         {{ booking.trek.start_date.strftime("%d %b %Y") }}
@@ -326,7 +326,7 @@
                                     </td>
 
 
-                                    <!-- Booking Date -->
+                                    
                                     <td>
 
                                         {% if booking.booking_date %}
@@ -348,7 +348,7 @@
                                     </td>
 
 
-                                    <!-- Booking Status -->
+                                    
                                     <td>
 
                                         {% if booking.status == "Confirmed" %}
@@ -380,7 +380,7 @@
                                     </td>
 
 
-                                    <!-- Attendance -->
+                                    
                                     <td>
 
                                         {% if booking.status == "Cancelled" %}
@@ -428,7 +428,7 @@
 
     {% else %}
 
-        <!-- No Results -->
+        
         <div class="card shadow-sm">
 
             <div class="card-body text-center py-5">
